@@ -1,10 +1,17 @@
 import React from "react";
 import user from "../images/user.png";
 import { Link } from "react-router-dom";
+import { useContactsCrud } from "../context/ContactsCrudContext";
 
 const ContactCard = (props) => {
   const { id, name, email } = props.contact;
 
+  const {removeContactHandler} = useContactsCrud();
+
+
+  const deleteContact = (id) =>{
+    removeContactHandler(id);
+  }
   console.log("props.contacts", props.contact);
   return (
     <div className="item">
@@ -24,7 +31,7 @@ const ContactCard = (props) => {
       <i
         className="trash alternate outline icon"
         style={{ color: "green", marginTop: "170px", marginRight: "60px" }}
-        onClick={() => props.clickHandler(id)}
+        onClick={() => deleteContact(id)}
       ></i>
       <Link
         to={`/edit`}
@@ -36,12 +43,6 @@ const ContactCard = (props) => {
           style={{ color: "blue", marginTop: "7px" }}
         ></i>
       </Link>
-      {/* <Link to={{ pathname: `/edit`, state: { contact : props.contact } }}>
-        <i
-          className="edit alternate outline icon"
-          style={{ color: "blue", marginTop: "7px" }}
-        ></i>
-      </Link> */}
     </div>
   );
 };

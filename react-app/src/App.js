@@ -7,8 +7,8 @@ import { useState, useEffect } from "react";
 import { v4 as uuid } from "uuid";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import ContactDetail from "./components/ContactDetail";
-import api from "./api/contacts";
-import EditContactWithLocation from "./components/EditContact";
+import EditContact from "./components/EditContact";
+import {ContactsCrudContextProvider} from './context/ContactsCrudContext'
 
 function App() {
   // const contacts =[
@@ -24,114 +24,27 @@ function App() {
   //   },
   // ]
 
-  const LOCAL_STORAGE_KEY = "contacts";
+  
 
-  const [contacts, setContacts] = useState([]);
 
-  const [searchTerm , setSearchTerm] = useState("");
-
-  const [searchResults, setSearchResults] = useState([]);
-
-  const retriveContacts = async () => {
-    const response = await api.get("/contacts");
-    return response.data;
-  };
-
-  useEffect(() => {
-    // const contactsFromStorage = JSON.parse(
-    //   localStorage.getItem(LOCAL_STORAGE_KEY)
-    // );
-    // if (contactsFromStorage) setContacts(contactsFromStorage);
-    const getAllContacts = async () => {
-      const contacts = await retriveContacts();
-      if (contacts) setContacts(contacts);
-    };
-
-    getAllContacts();
-  }, []);
-
-  useEffect(() => {
-    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(contacts));
-  }, [contacts]);
-
-  const addContactHandler = async (contact) => {
-    console.log("#### =>" + contact);
-    const request = {
-      id: uuid(),
-      ...contact,
-    };
-
-    const response = await api.post("/contacts", request);
-    console.log(response);
-    //{ id: uuid(), ...contact }
-    setContacts([...contacts, response.data]);
-  };
-
-  const updateContactHandler = async (contact) => {
-    const res = await api.put(`/contacts/${contact.id}`, contact);
-
-    console.log("new", res.data);
-
-    const { id, name, email } = res.data;
-
-    setContacts(
-      contacts.map((contact) => {
-        return contact.id === id ? { ...res.data } : contact;
-      })
-    );
-  };
-
-  const removeContactHandler = async (id) => {
-    await api.delete(`/contacts/${id}`);
-    // id we received from props from contactcard
-    console.log("id in App.js", id);
-    const newContactList = contacts.filter((contact) => {
-      console.log(contact.id, id, contact.id !== id);
-      return contact.id !== id;
-    });
-    console.log(newContactList);
-    setContacts(newContactList);
-  };
-
-  const searchHandler = (searchTerm) =>{
-    console.log("searchHandler",searchTerm);
-    setSearchTerm(searchTerm);
-
-    if(searchTerm !== ""){
-      const newContactList = contacts.filter((contact) =>{
-        console.log("$$$$$$" , contact , Object.values(contact).join(" ").toLowerCase(), Object.values(contact).join(" ").toLowerCase().includes(searchTerm.toLowerCase()));
-        return Object.values(contact).join(" ").toLowerCase().includes(searchTerm.toLowerCase());
-      })
-
-      setSearchResults(newContactList);
-      console.log("setSearchResults",searchResults, newContactList);
-    }else{
-      setSearchResults(contacts);
-    }
-  }
+  
 
   return (
     <div className="ui container">
       <Router>
         {/* <Header /> */}
+        <ContactsCrudContextProvider>
         <Routes>
-          {/* <Route path="/" element={() => <ContactList contacts={contacts} getContactId={removeContactHandler}/>}></Route> */}
           <Route
             path="/"
             element={
               <ContactList
-                contacts={searchTerm.length < 1 ? contacts : searchResults}
-                getContactId={removeContactHandler}
-                term={searchTerm}
-                searchKeyword={searchHandler}
-
               />
             }
           ></Route>
-          {/* <Route path="/" render={(props) =>(<ContactList {...props} contacts={contacts} getContactId={removeContactHandler} />)}></Route> */}
           <Route
             path="/add"
-            element={<AddContact addContactHandler={addContactHandler} />}
+            element={<AddContact />}
           ></Route>
           <Route path="/home" element={<div> Home Page </div>} />
 
@@ -140,12 +53,11 @@ function App() {
           <Route
             path="/edit"
             element={
-              <EditContactWithLocation
-                updateContactHandler={updateContactHandler}
-              />
+              <EditContact />
             }
           />
         </Routes>
+        </ContactsCrudContextProvider>
       </Router>
     </div>
   );
