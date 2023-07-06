@@ -1,10 +1,7 @@
 import "./App.css";
-// import AVideo from './components/AVideo'
 import Header from "./components/Header";
 import ContactList from "./components/ContactList";
 import AddContact from "./components/AddContact";
-import { useState, useEffect } from "react";
-import { v4 as uuid } from "uuid";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import ContactDetail from "./components/ContactDetail";
 import EditContact from "./components/EditContact";
@@ -24,15 +21,11 @@ function App() {
   //   },
   // ]
 
-  
-
-
-  
 
   return (
     <div className="ui container">
       <Router>
-        {/* <Header /> */}
+        <Header />
         <ContactsCrudContextProvider>
         <Routes>
           <Route

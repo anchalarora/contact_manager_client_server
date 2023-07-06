@@ -21,7 +21,6 @@ const ContactCard = (props) => {
         <Link
           to={`/contact/${id}`}
           state={{ contact: props.contact }}
-          className="link"
         >
           <div className="header">{name} </div>
           <div>{email} </div>
@@ -30,7 +29,7 @@ const ContactCard = (props) => {
 
       <i
         className="trash alternate outline icon"
-        style={{ color: "green", marginTop: "170px", marginRight: "60px" }}
+        style={{ color: "green", marginTop: "7px", marginRight: "10px" }}
         onClick={() => deleteContact(id)}
       ></i>
       <Link
@@ -46,5 +45,8 @@ const ContactCard = (props) => {
     </div>
   );
 };
+
+
+
 
 export default ContactCard;
