@@ -7,8 +7,6 @@ const EditContact = ()=> {
   const location = useLocation();
   const navigate = useNavigate();
   const {id, name , email} = location.state.contact;
-  
-
   const [newName , setNewName] = useState(name);
   const [newEmail, setNewEmail] = useState(email);
 

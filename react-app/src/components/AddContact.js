@@ -20,7 +20,7 @@ const AddContact = () => {
     setName("");
     setEmail("");
     navigate("/");
-    //this.props.history.push("/");
+    //this.props.history.push("/"); //class components
   };
 
   return (

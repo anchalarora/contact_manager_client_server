@@ -10,8 +10,7 @@ export function ContactsCrudContextProvider({ children }) {
   const [searchTerm , setSearchTerm] = useState("");
 
   const [searchResults, setSearchResults] = useState([]);
-
-
+  
   const retriveContacts = async () => {
     const response = await api.get("/contacts");
     if (response.data) setContacts(response.data);
